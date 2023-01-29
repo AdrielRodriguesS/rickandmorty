@@ -3,14 +3,18 @@ package br.com.api.rickandmorty.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@MappedSuperclass
+@Entity
+@Table(name="locations")
 public class Location {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,26 +28,31 @@ public class Location {
 	@Size(max=100)
 	private String dimension;
 	
-	private List<String> residents = new ArrayList<>();
+	private String residents;
 	
-	@NotBlank
 	@Size(max=100)
 	private String url;
 	
-	@NotBlank
 	@Size(max=100)
-	private String create;
+	private String created;
+	
+	@OneToMany(mappedBy = "originLocation", cascade = CascadeType.REMOVE)
+	private List<FanficCharacter> charactersOrigin = new ArrayList<>();
 		
+	@OneToMany(mappedBy = "lastKnowLocation", cascade = CascadeType.REMOVE)
+	private List<FanficCharacter> charactersLastKnow = new ArrayList<>();
+	
 	public Location() {
 	}
 
-	public Location(Integer id, String name, String dimension, List<String> residents, String url, String create) {
+	public Location(Integer id, @NotBlank @Size(max = 100) String name, @NotBlank @Size(max = 100) String dimension,
+			String residents, @Size(max = 100) String url, @Size(max = 100) String created) {
 		this.id = id;
 		this.name = name;
 		this.dimension = dimension;
 		this.residents = residents;
 		this.url = url;
-		this.create = create;
+		this.created = created;
 	}
 
 	public Integer getId() {
@@ -70,11 +79,11 @@ public class Location {
 		this.dimension = dimension;
 	}
 
-	public List<String> getResidents() {
+	public String getResidents() {
 		return residents;
 	}
 
-	public void setResidents(List<String> residents) {
+	public void setResidents(String residents) {
 		this.residents = residents;
 	}
 
@@ -86,12 +95,12 @@ public class Location {
 		this.url = url;
 	}
 
-	public String getCreate() {
-		return create;
+	public String getCreated() {
+		return created;
 	}
 
-	public void setCreate(String create) {
-		this.create = create;
+	public void setCreated(String created) {
+		this.created = created;
 	}
-	
+
 }

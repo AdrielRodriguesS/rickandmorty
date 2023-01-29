@@ -1,20 +1,19 @@
 package br.com.api.rickandmorty.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="characters")
-public class Character {
+public class FanficCharacter {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -34,26 +33,26 @@ public class Character {
 	@NotBlank
 	@Size(max=20)
 	private String gender;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "origin_location_id")	
+	private Location originLocation;
 	
-	@OneToOne(mappedBy = "character")
-	private OriginLocation originLocation;	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "last_location_id")	
+	private Location lastKnowLocation;
 	
-	@OneToMany(mappedBy = "character", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private LastKnowLocation lastKnowLocation;
-	
-	@NotBlank
 	private String url;
 	
 	@NotBlank
 	private String created;
 
-	public Character() {
+	public FanficCharacter() {
 	}
 
-	public Character(Integer id, @NotBlank @Size(max = 100) String name, @NotBlank @Size(max = 20) String status,
-			@NotBlank @Size(max = 50) String species, @NotBlank @Size(max = 20) String gender,
-			OriginLocation originLocation, LastKnowLocation lastKnowLocation, @NotBlank String url,
-			@NotBlank String created) {
+	public FanficCharacter(Integer id, @NotBlank @Size(max = 100) String name, @NotBlank @Size(max = 20) String status,
+			@NotBlank @Size(max = 50) String species, @NotBlank @Size(max = 20) String gender, Location originLocation,
+			Location lastKnowLocation, String url, @NotBlank String created) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -106,19 +105,19 @@ public class Character {
 		this.gender = gender;
 	}
 
-	public OriginLocation getOriginLocation() {
+	public Location getOriginLocation() {
 		return originLocation;
 	}
-
-	public void setOriginLocation(OriginLocation originLocation) {
+	
+	public void setOriginLocation(Location originLocation) {
 		this.originLocation = originLocation;
 	}
-
-	public LastKnowLocation getLastKnowLocation() {
+	
+	public Location getLastKnowLocation() {
 		return lastKnowLocation;
 	}
 
-	public void setLastKnowLocation(LastKnowLocation lastKnowLocation) {
+	public void setLastKnowLocation(Location lastKnowLocation) {
 		this.lastKnowLocation = lastKnowLocation;
 	}
 
@@ -137,5 +136,12 @@ public class Character {
 	public void setCreated(String created) {
 		this.created = created;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "FanficCharacter [id=" + id + ", name=" + name + ", status=" + status + ", species=" + species
+				+ ", gender=" + gender + ", originLocation=" + originLocation + ", lastKnowLocation=" + lastKnowLocation
+				+ ", url=" + url + ", created=" + created + "]";
+	}
+		
 }
