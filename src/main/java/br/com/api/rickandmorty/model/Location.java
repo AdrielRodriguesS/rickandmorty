@@ -3,7 +3,6 @@ package br.com.api.rickandmorty.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,10 +35,10 @@ public class Location {
 	@Size(max=100)
 	private String created;
 	
-	@OneToMany(mappedBy = "originLocation", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "originLocation")
 	private List<FanficCharacter> charactersOrigin = new ArrayList<>();
 		
-	@OneToMany(mappedBy = "lastKnowLocation", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "lastKnowLocation")
 	private List<FanficCharacter> charactersLastKnow = new ArrayList<>();
 	
 	public Location() {
